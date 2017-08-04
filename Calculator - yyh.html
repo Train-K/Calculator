@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Calculator</title>
+		<style>
+			html{
+				overflow-y:hidden;
+			}
+			table{
+				width: 400px;
+				height: 400px;
+				font-size: 30px;
+				font-family: "黑体";
+				margin: 40px auto;
+				text-align: center;
+				border:1px solid #ccc;
+			}
+			td{
+				border:none;
+				background-color: #ccc;
+				z-index: -5;
+			}
+			td input:hover{
+				background-color: #ccc;
+			}
+			td input{
+				width: 100px;
+				height: 65px;
+				border:none;
+				color: black;
+				font-size: 30px;
+				text-align: center;
+				background-color: #FAFBFC;
+				cursor: pointer;
+				z-index: 1000;
+				transition:all .7s;
+			}
+			th{
+				background-color:#F1F3F3;
+				text-align: right;
+			}
+			th input{
+				display: inline-block;
+				width: 400px;
+				height:280px;
+				color:#000;
+				border:none;
+				font-size: 50px;
+				letter-spacing:5px;
+				text-align: right;
+				background-color:#F1F3F3;
+			}
+			.btnend{
+				height: 134px;
+				color: #fff;
+				background-color: #FA762F;
+			}
+			.btnend:hover{
+				background-color: #E56622;
+			}
+			.btnac{
+				color: #FA762F;
+			}
+		</style>
+		<script>
+			window.onload=function(){
+				var oAc = document.getElementById('js-btnac');
+				var oAdd = document.getElementById('js-btnadd');
+				var oSub = document.getElementById('js-btnsub');
+				var oChe = document.getElementById('js-btnche');
+				var oDiv = document.getElementById('js-btndiv');
+				var oBai = document.getElementById('js-btnbai');
+				var oEnd = document.getElementById('js-btnend');
+				var oShow = document.getElementById('js-show');
+				var oDia = document.getElementById('js-dian');
+				var aInp = document.getElementsByClassName('number');
+				var temp=0,num=0,num2=0;
+
+				//输出数字到显示层函数
+				function ainput(){
+				for(var i=0;i<aInp.length;i++){
+						aInp[i].onclick=function(){
+							if(temp==0){
+								temp+=parseFloat(this.value);
+							}
+							else{
+								temp+=this.value;
+							}
+								
+							oShow.value=temp;
+
+						}
+					}
+				}ainput();
+
+				//计算出错
+				function wrong(){
+					if(isNaN(oShow.value)){
+						oShow.value="计算出错";
+						temp=0;num=0;num2=0;
+					}
+				}
+
+				//显示层函数
+				function show(){
+					if(temp!=0){
+						oShow.value=parseFloat(temp);
+						wrong();
+					}
+				}show();
+
+				//AC归零
+				oAc.onclick = function(){
+					num=0;num2=0;temp=0;
+					oShow.value=temp;
+				}
+
+				//加法
+				oAdd.onclick = function(){	
+					temp=oShow.value;
+					num=parseFloat(temp);
+					temp+='+';
+					oShow.value+='+';
+				}
+
+				//减法
+				oSub.onclick = function(){
+					temp=oShow.value;
+					num=parseFloat(temp);
+					temp+='-';
+					oShow.value+='-';
+				}
+
+				//乘法
+				oChe.onclick = function(){
+					temp=oShow.value;
+					num=parseFloat(temp);
+					temp+='×';
+					oShow.value+='×';
+				}
+
+				//除法
+				oDiv.onclick = function(){
+					temp=oShow.value;
+					num=parseFloat(temp);
+					temp+='/';
+					oShow.value+='/';
+				}
+				//%运算
+				oBai.onclick = function(){
+					num=parseFloat(temp);
+					num/=100;
+					oShow.value/=100;
+					wrong();
+				}
+				//小数点
+				oDia.onclick = function(){
+					temp+='.';
+					oShow.value+='.';
+					if(wrong()){oShow.value=0;};
+				}
+
+
+				//计算结果
+				oEnd.onclick = function(){
+					num2=parseFloat(temp.substring(num.toString().length+1));
+					if(temp.indexOf('+') > 0){
+						oShow.value=num+num2;
+					}
+					else if(temp.indexOf('-')>0){
+						oShow.value=num-num2;
+					}
+					else if(temp.indexOf('×')>0){
+						oShow.value=num*num2;
+						oShow.value=Math.floor(oShow.value * 1000000) / 1000000;
+					}
+					else if(temp.indexOf('/')>0){
+						if(num2!=0){
+							oShow.value=num/num2;
+							oShow.value=Math.floor(oShow.value * 1000000) / 1000000;
+						}
+						else{
+							oShow.value="计算出错";
+						}
+					}
+					wrong();
+					temp=0;num=0;num2=0;
+				}
+
+
+
+			}
+		</script>
+	</head>
+	<body>
+		<div class="cul">
+			<table>
+				<tr>
+					<th colspan="5">
+						<input type="text" value="0" id="js-show" disabled>
+					</th>
+				</tr>
+				<tr>
+					<td><input type="button" value="AC" class="btnac" id="js-btnac"></td>
+					<td><input type="button" value="+" id="js-btnadd"></td>
+					<td><input type="button" value="-" id="js-btnsub"></td>
+					<td><input type="button" value="/" id="js-btndiv"></td>
+										
+				</tr>
+				<tr>
+					<td><input type="button" value="7" class="number"></td>
+					<td><input type="button" value="8" class="number"></td>
+					<td><input type="button" value="9" class="number"></td>
+					<td><input type="button" value="×" id="js-btnche"></td>		
+				</tr>
+				<tr>
+					<td><input type="button" value="4" class="number"></td>
+					<td><input type="button" value="5" class="number"></td>
+					<td><input type="button" value="6" class="number"></td>
+					<td><input type="button" value="%" id="js-btnbai"></td>
+
+				</tr>
+				<tr>
+					<td><input type="button" value="1" class="number"></td>
+					<td><input type="button" value="2" class="number"></td>
+					<td><input type="button" value="3" class="number"></td>	
+					<td rowspan="2"><input type="button" value="=" class="btnend" id="js-btnend"></td>
+				</tr>
+				<tr>
+					<td><input type="button" value="." class="number" id="js-dian"></td>
+					<td><input type="button" value="0" class="number"></td>
+					<td><input type="button" value="00" class="number"></td>
+				</tr>
+				
+			</table>
+		</div>
+	</body>
+</html>
